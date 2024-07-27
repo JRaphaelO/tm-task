@@ -114,6 +114,16 @@ func (t *Task) StartTask() error {
 	return nil
 }
 
+func (t *Task) StopTask() error {
+	if t.Status == STOPPED {
+		return errors.New("task already stopped")
+	}
+
+	t.Status = STOPPED
+	t.UpdatedAt = time.Now()
+	return nil
+}
+
 func (t *Task) GetID() string {
 	return t.ID
 }

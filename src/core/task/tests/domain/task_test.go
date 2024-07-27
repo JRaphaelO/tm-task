@@ -306,3 +306,74 @@ func TestTask_StartTask(t *testing.T) {
 		require.Equal(t, "task already started", err.Error())
 	})
 }
+
+func TestTask_StopTask(t *testing.T) {
+	t.Parallel()
+
+	t.Run("Test Stop Task", func(t *testing.T) {
+		t.Parallel()
+
+		parsedTime, err := time.Parse(time.RFC3339, "2021-12-31T23:59:59Z")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		task, err := domain.NewTask(
+			"Task 1",
+			parsedTime,
+			nil,
+		)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, task)
+
+		err = task.StartTask()
+
+		require.Nil(t, err)
+		require.Equal(t, domain.IN_PROGRESS, task.Status)
+		require.NotEmpty(t, task.StartedDate)
+		require.NotEmpty(t, task.UpdatedAt)
+
+		err = task.StopTask()
+
+		require.Nil(t, err)
+		require.Equal(t, domain.STOPPED, task.Status)
+		require.NotEmpty(t, task.UpdatedAt)
+	})
+
+	t.Run("Test Stop Task already stopped", func(t *testing.T) {
+		t.Parallel()
+
+		parsedTime, err := time.Parse(time.RFC3339, "2021-12-31T23:59:59Z")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		task, err := domain.NewTask(
+			"Task 1",
+			parsedTime,
+			nil,
+		)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, task)
+
+		err = task.StartTask()
+
+		require.Nil(t, err)
+		require.Equal(t, domain.IN_PROGRESS, task.Status)
+		require.NotEmpty(t, task.StartedDate)
+		require.NotEmpty(t, task.UpdatedAt)
+
+		err = task.StopTask()
+
+		require.Nil(t, err)
+		require.Equal(t, domain.STOPPED, task.Status)
+		require.NotEmpty(t, task.UpdatedAt)
+
+		err = task.StopTask()
+
+		require.NotNil(t, err)
+		require.Equal(t, "task already stopped", err.Error())
+	})
+}
