@@ -15,7 +15,7 @@ type CreateTaskUseCaseRequest struct {
 }
 
 type CreateTaskUseCase struct {
-	taskRepository repositories.TaskRepository
+	TaskRepository repositories.TaskRepository
 }
 
 func (uc *CreateTaskUseCase) Execute(data CreateTaskUseCaseRequest) error {
@@ -29,6 +29,6 @@ func (uc *CreateTaskUseCase) Execute(data CreateTaskUseCaseRequest) error {
 		return err
 	}
 
-	err = uc.taskRepository.Save(*task)
+	err = uc.TaskRepository.Save(*task)
 	return err
 }
