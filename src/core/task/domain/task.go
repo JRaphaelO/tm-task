@@ -15,6 +15,12 @@ func init() {
 }
 
 type TaskInterface interface {
+	// Task management methods
+	UpdateTask(title string, description string, previsionDate time.Time) error
+	StartTask() error
+	StopTask() error
+	CompleteTask() error
+
 	// Get methods for Task
 	GetID() string
 	GetTitle() string
@@ -66,6 +72,35 @@ func NewTask(title string, previsionDate time.Time, description *string) (*Task,
 	}
 
 	return task, nil
+}
+
+func (t *Task) UpdateTask(title *string, description *string, previsionDate *time.Time, startedDate *time.Time, finishedDate *time.Time) error {
+	if title != nil {
+		t.Title = *title
+	}
+
+	if description != nil {
+		t.Description = *description
+	}
+
+	if previsionDate != nil {
+		t.PrevisionDate = *previsionDate
+	}
+
+	if startedDate != nil {
+		t.StartedDate = *startedDate
+	}
+
+	if finishedDate != nil {
+		t.FinishedDate = *finishedDate
+	}
+
+	if err := t.validate(); err != nil {
+		return err
+	}
+
+	t.UpdatedAt = time.Now()
+	return nil
 }
 
 func (t *Task) GetID() string {
