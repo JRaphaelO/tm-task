@@ -17,7 +17,7 @@ type TaskEntityResponse struct {
 }
 
 type GetTaskRequest struct {
-	ID          *string
+	ID          string
 	CurrentPage int
 }
 
@@ -31,8 +31,8 @@ type GetTaskUseCase struct {
 }
 
 func (uc *GetTaskUseCase) Execute(requestData GetTaskRequest) (GetTaskResponse, error) {
-	if requestData.ID != nil {
-		task, err := uc.TaskRepository.GetID(*requestData.ID)
+	if requestData.ID != "" {
+		task, err := uc.TaskRepository.GetID(requestData.ID)
 		if err != nil {
 			return GetTaskResponse{}, errors.New("task not found")
 		}
@@ -66,7 +66,7 @@ func (uc *GetTaskUseCase) Execute(requestData GetTaskRequest) (GetTaskResponse, 
 		},
 	)
 	if err != nil {
-		return GetTaskResponse{}, errors.New("tasks not found")
+		return GetTaskResponse{}, errors.New("tasks not found 2")
 	}
 
 	data := make([]TaskEntityResponse, 0, len(tasks))

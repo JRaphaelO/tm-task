@@ -6,7 +6,7 @@ import (
 
 	"github.com/jraphaelo/taskmanagement/task/src/core/task/domain/entities"
 	"github.com/jraphaelo/taskmanagement/task/src/core/task/infrastructure/database/memory"
-	"github.com/jraphaelo/taskmanagement/task/src/core/task/useCases/task"
+	"github.com/jraphaelo/taskmanagement/task/src/core/task/usecases/task"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,7 +24,7 @@ func TestGetTaskUseCase_Execute(t *testing.T) {
 
 		taskID := taskModel.GetID()
 		request := task.GetTaskRequest{
-			ID:          &taskID,
+			ID:          taskID,
 			CurrentPage: 1,
 		}
 		response, err := uc.Execute(request)
@@ -38,7 +38,7 @@ func TestGetTaskUseCase_Execute(t *testing.T) {
 	t.Run("task not found", func(t *testing.T) {
 		taskID := "invalid-id"
 		request := task.GetTaskRequest{
-			ID:          &taskID,
+			ID:          taskID,
 			CurrentPage: 1,
 		}
 		_, err := uc.Execute(request)
