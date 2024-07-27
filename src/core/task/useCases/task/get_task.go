@@ -22,8 +22,8 @@ type GetTaskRequest struct {
 }
 
 type GetTaskResponse struct {
-	data       []TaskEntityResponse
-	pagination domain.Pagination
+	Data       []TaskEntityResponse
+	Pagination domain.Pagination
 }
 
 type GetTaskUseCase struct {
@@ -38,7 +38,7 @@ func (uc *GetTaskUseCase) Execute(requestData GetTaskRequest) (GetTaskResponse, 
 		}
 
 		return GetTaskResponse{
-			data: []TaskEntityResponse{
+			Data: []TaskEntityResponse{
 				{
 					ID:            task.GetID(),
 					Title:         task.GetTitle(),
@@ -48,7 +48,7 @@ func (uc *GetTaskUseCase) Execute(requestData GetTaskRequest) (GetTaskResponse, 
 					FinishedDate:  task.GetFinishedDate().Format("2006-01-02"),
 				},
 			},
-			pagination: domain.Pagination{
+			Pagination: domain.Pagination{
 				Total:        1,
 				PerPage:      1,
 				CurrentPage:  1,
@@ -82,8 +82,8 @@ func (uc *GetTaskUseCase) Execute(requestData GetTaskRequest) (GetTaskResponse, 
 	}
 
 	response := GetTaskResponse{
-		data: data,
-		pagination: domain.Pagination{
+		Data: data,
+		Pagination: domain.Pagination{
 			Total:        len(data),
 			PerPage:      2,
 			CurrentPage:  1,
