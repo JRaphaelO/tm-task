@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jraphaelo/taskmanagement/task/src/core/task/domain"
+	domain "github.com/jraphaelo/taskmanagement/task/src/core/task/domain/entities"
 	"github.com/stretchr/testify/require"
 )
 
