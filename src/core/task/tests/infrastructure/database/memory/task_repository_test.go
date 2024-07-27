@@ -44,3 +44,44 @@ func TestInMemoryTaskRepository_Create(t *testing.T) {
 	})
 
 }
+
+func TestInMemoryTaskRepository_GetByID(t *testing.T) {
+	t.Parallel()
+
+	t.Run("Should get a task by ID", func(t *testing.T) {
+		t.Parallel()
+
+		// Arrange
+		repository := memory.NewInMemoryTaskRepository()
+		parsedDate, _ := time.Parse("2006-01-02", "2021-12-31")
+		description := "Description"
+		task, _ := entities.NewTask("Task 1", parsedDate, &description)
+		repository.Save(*task)
+
+		// Act
+		taskFound, err := repository.GetID(task.GetID())
+
+		// Assert
+		require.Nil(t, err)
+		require.Equal(t, task.GetID(), taskFound.GetID())
+		require.Equal(t, task.GetTitle(), taskFound.GetTitle())
+		require.Equal(t, task.GetPrevisionDate(), taskFound.GetPrevisionDate())
+		require.Equal(t, task.GetDescription(), taskFound.GetDescription())
+	})
+
+	t.Run("Should return an error when task not found", func(t *testing.T) {
+		t.Parallel()
+
+		// Arrange
+		repository := memory.NewInMemoryTaskRepository()
+
+		// Act
+		_, err := repository.GetID("non-existent-id")
+
+		// Assert
+		require.NotNil(t, err)
+		require.Equal(t, "task not found", err.Error())
+	})
+}
+
+
