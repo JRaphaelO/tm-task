@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/jraphaelo/taskmanagement/task/src/core/task/infrastructure/database/memory"
-	"github.com/jraphaelo/taskmanagement/task/src/core/task/useCases/task"
+	"github.com/jraphaelo/taskmanagement/task/src/core/task/usecases/task"
 	"github.com/stretchr/testify/assert"
 )
 

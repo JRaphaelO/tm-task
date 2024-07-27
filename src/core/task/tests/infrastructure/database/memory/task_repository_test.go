@@ -4,6 +4,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jraphaelo/taskmanagement/task/src/core/_shared/domain"
 	"github.com/jraphaelo/taskmanagement/task/src/core/task/domain/entities"
 	"github.com/jraphaelo/taskmanagement/task/src/core/task/infrastructure/database/memory"
 	"github.com/stretchr/testify/require"
@@ -100,7 +101,9 @@ func TestInMemoryTaskRepository_GetAll(t *testing.T) {
 		repository.Save(*task2)
 
 		// Act
-		tasks, err := repository.GetAll()
+		tasks, err := repository.GetAll(domain.Pagination{
+			CurrentPage: 1,
+		})
 
 		// Assert
 		require.Nil(t, err)
