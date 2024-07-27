@@ -247,3 +247,62 @@ func TestTask_UpdateTask(t *testing.T) {
 		require.Equal(t, "the title must be less than or equal 120 characters", err.Error())
 	})
 }
+
+func TestTask_StartTask(t *testing.T) {
+	t.Parallel()
+
+	t.Run("Test Start Task", func(t *testing.T) {
+		t.Parallel()
+
+		parsedTime, err := time.Parse(time.RFC3339, "2021-12-31T23:59:59Z")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		task, err := domain.NewTask(
+			"Task 1",
+			parsedTime,
+			nil,
+		)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, task)
+
+		err = task.StartTask()
+
+		require.Nil(t, err)
+		require.Equal(t, domain.IN_PROGRESS, task.Status)
+		require.NotEmpty(t, task.StartedDate)
+		require.NotEmpty(t, task.UpdatedAt)
+	})
+
+	t.Run("Test Start Task already started", func(t *testing.T) {
+		t.Parallel()
+
+		parsedTime, err := time.Parse(time.RFC3339, "2021-12-31T23:59:59Z")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		task, err := domain.NewTask(
+			"Task 1",
+			parsedTime,
+			nil,
+		)
+
+		require.Nil(t, err)
+		require.NotEmpty(t, task)
+
+		err = task.StartTask()
+
+		require.Nil(t, err)
+		require.Equal(t, domain.IN_PROGRESS, task.Status)
+		require.NotEmpty(t, task.StartedDate)
+		require.NotEmpty(t, task.UpdatedAt)
+
+		err = task.StartTask()
+
+		require.NotNil(t, err)
+		require.Equal(t, "task already started", err.Error())
+	})
+}

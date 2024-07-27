@@ -103,6 +103,17 @@ func (t *Task) UpdateTask(title *string, description *string, previsionDate *tim
 	return nil
 }
 
+func (t *Task) StartTask() error {
+	if t.Status == IN_PROGRESS {
+		return errors.New("task already started")
+	}
+
+	t.Status = IN_PROGRESS
+	t.StartedDate = time.Now()
+	t.UpdatedAt = time.Now()
+	return nil
+}
+
 func (t *Task) GetID() string {
 	return t.ID
 }
