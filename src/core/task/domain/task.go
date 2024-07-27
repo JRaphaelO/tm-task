@@ -124,6 +124,17 @@ func (t *Task) StopTask() error {
 	return nil
 }
 
+func (t *Task) CompleteTask() error {
+	if t.Status == COMPLETED {
+		return errors.New("task already completed")
+	}
+
+	t.Status = COMPLETED
+	t.FinishedDate = time.Now()
+	t.UpdatedAt = time.Now()
+	return nil
+}
+
 func (t *Task) GetID() string {
 	return t.ID
 }
