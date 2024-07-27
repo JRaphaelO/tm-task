@@ -27,6 +27,18 @@ func (r *InMemoryTaskRepository) Save(task entities.Task) error {
 	return nil
 }
 
+func (r *InMemoryTaskRepository) GetAll() ([]entities.Task, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	tasks := make([]entities.Task, 0, len(r.tasks))
+	for _, task := range r.tasks {
+		tasks = append(tasks, task)
+	}
+
+	return tasks, nil
+}
+
 func (r *InMemoryTaskRepository) GetID(id string) (entities.Task, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
