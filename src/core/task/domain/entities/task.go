@@ -43,11 +43,11 @@ const (
 type Task struct {
 	ID            string     `valid:"uuidv4"`
 	Title         string     `valid:"required"`
-	Description   string     `valid:"optional"`
+	Description   *string    `valid:"optional"`
 	Status        StatusTask `valid:"optional"`
 	PrevisionDate time.Time  `valid:"required"`
-	StartedDate   time.Time  `valid:"-"`
-	FinishedDate  time.Time  `valid:"-"`
+	StartedDate   *time.Time `valid:"-"`
+	FinishedDate  *time.Time `valid:"-"`
 	CreatedAt     time.Time  `valid:"-"`
 	UpdatedAt     time.Time  `valid:"-"`
 }
@@ -56,15 +56,17 @@ func NewTask(title string, previsionDate time.Time, description *string) (*Task,
 	task := &Task{
 		ID:            uuid.NewV4().String(),
 		Title:         title,
-		Description:   "",
+		Description:   nil,
 		Status:        CREATED,
 		PrevisionDate: previsionDate,
+		StartedDate:   nil,
+		FinishedDate:  nil,
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
 	}
 
 	if description != nil {
-		task.Description = *description
+		task.Description = description
 	}
 
 	if err := task.validate(); err != nil {
@@ -80,7 +82,7 @@ func (t *Task) UpdateTask(title *string, description *string, previsionDate *tim
 	}
 
 	if description != nil {
-		t.Description = *description
+		t.Description = description
 	}
 
 	if previsionDate != nil {
@@ -88,11 +90,11 @@ func (t *Task) UpdateTask(title *string, description *string, previsionDate *tim
 	}
 
 	if startedDate != nil {
-		t.StartedDate = *startedDate
+		t.StartedDate = startedDate
 	}
 
 	if finishedDate != nil {
-		t.FinishedDate = *finishedDate
+		t.FinishedDate = finishedDate
 	}
 
 	if err := t.validate(); err != nil {
@@ -109,7 +111,8 @@ func (t *Task) StartTask() error {
 	}
 
 	t.Status = IN_PROGRESS
-	t.StartedDate = time.Now()
+	startedData := time.Now()
+	t.StartedDate = &startedData
 	t.UpdatedAt = time.Now()
 	return nil
 }
@@ -130,7 +133,8 @@ func (t *Task) CompleteTask() error {
 	}
 
 	t.Status = COMPLETED
-	t.FinishedDate = time.Now()
+	now := time.Now()
+	t.FinishedDate = &now
 	t.UpdatedAt = time.Now()
 	return nil
 }
@@ -143,7 +147,7 @@ func (t *Task) GetTitle() string {
 	return t.Title
 }
 
-func (t *Task) GetDescription() string {
+func (t *Task) GetDescription() *string {
 	return t.Description
 }
 
@@ -155,11 +159,11 @@ func (t *Task) GetPrevisionDate() time.Time {
 	return t.PrevisionDate
 }
 
-func (t *Task) GetStartedDate() time.Time {
+func (t *Task) GetStartedDate() *time.Time {
 	return t.StartedDate
 }
 
-func (t *Task) GetFinishedDate() time.Time {
+func (t *Task) GetFinishedDate() *time.Time {
 	return t.FinishedDate
 }
 
